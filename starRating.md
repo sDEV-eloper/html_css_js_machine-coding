@@ -21,6 +21,10 @@ brr.forEach((n, index, array) => {
 });
 console.log(brr);
 
+6. getElementsByTagName(tag) return HTML collection
+7. querySelectorAll() returns nodelist (not an array).
+
+
 
 
 
