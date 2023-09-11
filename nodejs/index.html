@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client-side Data Retrieval</title>
+</head>
+<body>
+    <h1>Data from Server</h1>
+    <div id="data-container">
+        <!-- The retrieved data will be displayed here -->
+    </div>
+
+    <script>
+        // Make an HTTP GET request to the server
+        fetch('http://localhost:5000')
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse the JSON response
+            })
+            .then((data) => {
+                // Handle the retrieved data here
+                const dataContainer = document.getElementById('data-container');
+                dataContainer.innerHTML = JSON.stringify(data, null, 2); // Display the JSON data
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    </script>
+</body>
+</html>
