@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box {
+            border: 2px solid black;
+            padding: 15px;
+            margin: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .post {
+            border: 1px solid black;
+            padding: 30px;
+            background-color: rgb(185, 245, 255);
+        }
+    </style>
+</head>
+<body>
+    <h1>Infinite Scroll</h1>
+    <div class="box"></div>
+    <script>
+        const box = document.querySelector('.box');
+        let limit = 8;
+        let pageCount = 1;
+        let allPosts = [];
+
+        const getData = async () => {
+            const data = await fetch(`https://jsonplaceholder.typicode.com/posts?_limit=${limit}&_page=${pageCount}`);
+            const json = await data.json();
+            console.log(json);
+
+            // if (json.length === 0) {
+            //     // No more data to load, remove the scroll event listener.
+            //     window.removeEventListener("scroll", scrollHandler);
+            //     return;
+            // }
+
+            allPosts = [...allPosts, ...json]; // Add new data to the existing list.
+
+            // Render all posts currently in the list.
+            renderPosts();
+
+            pageCount++; // Increment page count for the next request.
+        }
+
+        const renderPosts = () => {
+            box.innerHTML = ""; // Clear the existing content.
+            allPosts.forEach((item) => {
+                const htmlData = `
+                    <div class="post">
+                        <p>${item.id}</p>
+                        <p>${item.body}</p>
+                    </div>
+                `;
+                box.insertAdjacentHTML("beforeend", htmlData);
+            });
+        }
+
+        const showData = () => {
+            setTimeout(() => {
+                getData();
+            }, 1000);
+        }
+
+        const scrollHandler = () => {
+            const { scrollHeight, scrollTop, clientHeight } = document.documentElement;
+
+            if (scrollHeight <= scrollTop + clientHeight + 1) {
+                showData();
+            }
+        }
+
+        getData(); // Load initial data.
+        window.addEventListener("scroll", scrollHandler);
+    </script>
+</body>
+</html>
