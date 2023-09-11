@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accordion</title>
+    <style>
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .box {
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        .box h1 {
+            background: rgb(151, 151, 151);
+            margin: 0;
+            padding: 5px;
+            cursor: pointer;
+        }
+        .box p {
+            display: none;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+            <h1>Title 1</h1>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit...</p>
+        </div>
+        <div class="box">
+            <h1>Title 2</h1>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit...</p>
+        </div>
+        <!-- Add more boxes as needed -->
+    </div>
+    <script>
+        const boxes = document.querySelectorAll('.box');
+
+        boxes.forEach((box) => {
+            const title = box.querySelector('h1');
+            const content = box.querySelector('p');
+
+            title.addEventListener('click', () => {
+                // Toggle the visibility of the content when the title is clicked
+                content.style.display = content.style.display === 'none' ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>
