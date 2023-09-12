@@ -1,4 +1,4 @@
-
+//Nodejs create an API of static data
 const http=require('http')
 const data = require('./data')
 http.createServer((req, res)=>{
