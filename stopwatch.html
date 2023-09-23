@@ -1,20 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Stopwatch</title>
-</head>
-<body>
+  </head>
+  <body>
     <div>
-        <div class="container">
-            <div class="timer">
-                <p>00:00:00</p>
-            </div>
-            <div class="controller">
-                <button>Play/Pause</button>
-            </div>
+      <div class="container">
+        <div class="time-section">
+          <p id="time">00:00:00</p>
         </div>
+        <div class="controller">
+          <button id="btn">Play/Pause</button>
+          <button id="reset">Reset</button>
+        </div>
+      </div>
     </div>
-</body>
+
+    <script>
+      const time = document.getElementById("time");
+      const btn=document.querySelector("#btn")
+      const reset=document.querySelector("#reset")
+      let hour = 0,
+        min = 0,
+        sec = 0;
+      const updateTimer=() => {
+        sec++;
+        if (sec > 59) {
+          sec = 0;
+          min++;
+          if (min > 59) {
+            min = 0;
+            hour++;
+          }
+        }
+
+        const formattedHour = hour < 10 ? `0${hour}` : hour;
+        const formattedMin = min < 10 ? `0${min}` : min;
+        const formattedSec = sec < 10 ? `0${sec}` : sec;
+
+        time.innerHTML = `${formattedHour}:${formattedMin}:${formattedSec}`;
+      }
+
+      let timer = setInterval(updateTimer, 1000);
+
+      let toggle=true
+      btn.addEventListener("click", ()=>{
+        if(toggle){
+            clearInterval(timer)
+      
+        }
+    else{
+        timer=setInterval(()=>updateTimer(),1000)
+    }
+        toggle=!toggle;
+      })
+      reset.addEventListener("click", ()=>{
+        clearInterval(timer)
+        hour =  min = sec=0,
+       time.innerHTML="00:00:00"
+        toggle=false;
+      })
+    </script>
+  </body>
 </html>
