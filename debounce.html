@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debounced Input</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <input type="text" id="inputField" placeholder="Enter text..." />
+    <p id="debouncedValue"></p>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+
+//Debounce: No matter how many times the user fires the event, the connected function will only run once the user stops firing the event
+
+<script>
+const inputField = document.getElementById('inputField');
+const debouncedValue = document.getElementById('debouncedValue');
+let timeoutId = null;
+const debounceTime = 2000; // Debounce delay in milliseconds
+
+const updateDebouncedValue = () => {
+  debouncedValue.textContent = inputField.value;
+  timeoutId = null;
+};
+
+inputField.addEventListener('input', () => {
+  if (timeoutId) {
+    clearTimeout(timeoutId);
+  }
+  timeoutId = setTimeout(updateDebouncedValue, debounceTime);
+});
+
+</script>
+<style>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+#debouncedValue {
+  font-weight: bold;
+}
+
+</style>
