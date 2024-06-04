@@ -17,3 +17,7 @@ const obj={
 //   By assigning this bound function to obj2.func, we ensure that when obj2.func is called, this refers to obj, not obj2
   obj2.func = boundFunc;
   console.log(obj2.func()); //hello obj
+
+  //using call() and apply()
+  console.log(obj2.func.call(obj)); // Output: 'hello obj'
+console.log(obj2.func.apply(obj)); // Output: 'hello obj'
