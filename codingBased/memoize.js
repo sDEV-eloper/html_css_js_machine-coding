@@ -5,7 +5,8 @@
 const memoize = (func) => {
     const cache = {};
     return (...args) => {
-      const key = JSON.stringify(args);
+      
+      const key = JSON.stringify(args); //convert array into string
       if (cache[key]) {
         console.log('Result from cache:', cache[key]);
         return cache[key];
