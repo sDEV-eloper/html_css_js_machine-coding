@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Debouncing Example</title>
+<style>
+  /* CSS for styling the input, results, and timer bar */
+  #searchInput {
+    margin-bottom: 10px;
+    padding: 5px;
+    font-size: 16px;
+    width: 300px;
+  }
+
+  #searchResults {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  #searchResults li {
+    margin-bottom: 5px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+  }
+
+  #timerContainer {
+    width: 300px;
+    height: 25px;
+    background-color: #AED6F1;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+
+  #timerBar {
+    height: 100%;
+    background-color: #3498db;
+    width: 0;
+  }
+
+  /* Animation for timer bar */
+  @keyframes increaseWidth {
+    0% {
+      width: 0;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+
+  /* Apply animation to timer bar */
+  #timerBar.active {
+    animation: increaseWidth 2s linear;
+  }
+</style>
+</head>
+<body>
+  <div id="timerContainer">
+    <div id="timerBar"></div>
+  </div>
+
+  <input type="text" id="searchInput" placeholder="Type something...">
+  <ul id="searchResults"></ul>
+
+  <script>
+    let timerBarTimeout;
+
+    function debounce(func, delay) {
+      let timerId;
+
+      return function(...args) {
+        const context = this;
+
+        clearTimeout(timerId);
+        timerId = setTimeout(() => {
+          func.apply(context, args);
+        }, delay);
+      };
+    }
+
+    // Example function to simulate searching/filtering
+    function search(query) {
+      // Simulated search results
+      const results = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
+      const filteredResults = results.filter(item => item.toLowerCase().includes(query.toLowerCase()));
+
+      // Display filtered results
+      const searchResultsElement = document.getElementById('searchResults');
+      searchResultsElement.innerHTML = '';
+      filteredResults.forEach(result => {
+        const li = document.createElement('li');
+        li.textContent = result;
+        searchResultsElement.appendChild(li);
+      });
+    }
+
+    // Debounce the search function with a delay of 2000 milliseconds (2 seconds)
+    const debouncedSearch = debounce(search, 2000);
+
+    // Attach the debounced function to the input field's input event
+    const searchInput = document.getElementById('searchInput');
+    const timerBar = document.getElementById('timerBar');
+    
+    searchInput.addEventListener('input', function(event) {
+      const query = event.target.value;
+      debouncedSearch(query);
+
+      // Restart timer animation
+      timerBar.classList.remove('active');
+      clearTimeout(timerBarTimeout);
+      void timerBar.offsetWidth; // Trigger reflow
+      timerBar.classList.add('active');
+      
+      // Reset timer animation after 2 seconds
+      timerBarTimeout = setTimeout(() => {
+        timerBar.classList.remove('active');
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
