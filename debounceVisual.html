@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Debouncing Example</title>
+<style>
+  /* CSS for styling the input, results, and timer bar */
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+  }
+
+  #searchContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #3498db;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+  }
+
+  #searchInput {
+    margin-bottom: 10px;
+    padding: 5px;
+    font-size: 16px;
+    width: 300px;
+  }
+
+  #searchResults {
+    list-style-type: none;
+    padding: 0;
+    width: 300px;
+  }
+
+  #searchResults li {
+    margin-bottom: 5px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+  }
+
+  #timerContainer {
+    width: 300px;
+    height: 25px;
+    background-color: #AED6F1;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+
+  #timerBar {
+    height: 100%;
+    background-color: #3498db;
+    width: 0;
+  }
+
+  /* Animation for timer bar */
+  @keyframes increaseWidth {
+    0% {
+      width: 0;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+
+  /* Apply animation to timer bar */
+  #timerBar.active {
+    animation: increaseWidth 1s linear;
+  }
+
+  .explain {
+    padding: 5px;
+    width: 80%;
+  }
+</style>
+</head>
+<body>
+  <h1 id='heading'>Debounce</h1>
+  <p class='explain'>Below, as many times the text will be rendered means that many calls are happening.. </p>
+
+  <div id="searchContainer">
+    <div id="timerContainer">
+      <div id="timerBar"></div>
+    </div>
+    <input type="text" id="searchInput" placeholder="Type something...">
+    <ul id="searchResults"></ul>
+    <button id="toggleButton">Toggle Debounce</button>
+  </div>
+
+  <script>
+    let timerBarTimeout;
+    let isDebounceEnabled = true;
+
+    // Function to render input query
+    function renderInput(query) {
+      // Display input query
+      const searchResultsElement = document.getElementById('searchResults');
+      const li = document.createElement('li');
+      li.textContent = query;
+      searchResultsElement.appendChild(li);
+    }
+
+    // Function to handle input event with or without debounce
+    function handleInput(event) {
+      const query = event.target.value;
+      if (isDebounceEnabled) {
+        debouncedRenderInput(query); // Call debounced function to log input after debounce delay
+        // Restart timer animation
+        const timerBar = document.getElementById('timerBar');
+        timerBar.classList.remove('active');
+        clearTimeout(timerBarTimeout);
+        void timerBar.offsetWidth; // Trigger reflow
+        timerBar.classList.add('active');
+        // Reset timer animation after 1 second
+        timerBarTimeout = setTimeout(() => {
+          timerBar.classList.remove('active');
+        }, 1000);
+      } else {
+        renderInput(query); // Call without debounce
+      }
+    }
+
+    // Create debounce function
+    function debounce(func, delay) {
+      let timerId;
+      return function(...args) {
+        const context = this;
+        clearTimeout(timerId);
+        timerId = setTimeout(() => {
+          func.apply(context, args);
+        }, delay);
+      };
+    }
+
+    // Debounce the renderInput function with a delay of 1000 milliseconds (1 second)
+    const debouncedRenderInput = debounce(renderInput, 1000);
+
+    // Attach the handleInput function to the input field's input event
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', handleInput);
+
+    // Toggle debounce functionality on button click
+    const toggleButton = document.getElementById('toggleButton');
+const heading = document.getElementById('heading');
+    toggleButton.addEventListener('click', function() {
+      isDebounceEnabled = !isDebounceEnabled;
+      toggleButton.textContent = isDebounceEnabled ? 'Disable Debounce' : 'Enable Debounce';
+heading.textContent = isDebounceEnabled ? ' Debounce' : 'Without Debounce';
+
+    });
+  </script>
+</body>
+</html>
