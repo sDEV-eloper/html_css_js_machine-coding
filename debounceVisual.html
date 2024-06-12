@@ -18,8 +18,8 @@
   }
 
   h1 {
-    margin-bottom: 20px;
-    font-size: 24px;
+ 
+    font-size: 34px;
     color: #333;
   }
 
@@ -83,15 +83,20 @@
     animation: increaseWidth 1s linear;
   }
 
-  .explain {
+  #explain {
     padding: 5px;
-    width: 80%;
+    width: 50%;
+    text-align: center;
+    font-size: larger;
   }
 </style>
 </head>
 <body>
   <h1 id='heading'>Debounce</h1>
-  <p class='explain'>Below, as many times the text will be rendered means that many calls are happening.. </p>
+  <p id='explain'>With debouncing, only one action is triggered even if there are multiple rapid button presses within delay, preventing performance issues when interacting with real API data.
+    <br/>
+(    Here delay is taken : 1 sec , just for example)
+  </p>
 
   <div id="searchContainer">
     <div id="timerContainer">
@@ -99,7 +104,7 @@
     </div>
     <input type="text" id="searchInput" placeholder="Type something...">
     <ul id="searchResults"></ul>
-    <button id="toggleButton">Toggle Debounce</button>
+    <button id="toggleButton"></button>
   </div>
 
   <script>
@@ -156,12 +161,13 @@
 
     // Toggle debounce functionality on button click
     const toggleButton = document.getElementById('toggleButton');
+    const explain=document.getElementById('explain')
 const heading = document.getElementById('heading');
     toggleButton.addEventListener('click', function() {
       isDebounceEnabled = !isDebounceEnabled;
-      toggleButton.textContent = isDebounceEnabled ? 'Disable Debounce' : 'Enable Debounce';
+      // toggleButton.textContent = isDebounceEnabled ? 'Disable Debounce' : 'Enable Debounce';
 heading.textContent = isDebounceEnabled ? ' Debounce' : 'Without Debounce';
-
+explain.textContent= isDebounceEnabled? explain.textContent : 'Without debouncing, each single button press can trigger multiple calls, potentially causing performance issues, especially when interacting with real API data.'
     });
   </script>
 </body>
